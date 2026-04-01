@@ -5,16 +5,16 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "build:server": "tsc --project tsconfig.server.json",
     "server": "tsx src/server/index.ts",
     "dev": "concurrently \"vite build --watch\" \"nodemon --exec tsx src/server/index.ts\"",
-    "start": "npm run build && npm run build:server && node dist/server/index.js"
+    "start": "node --import tsx src/server/index.ts"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "tsx": "^4.7.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.7",
@@ -23,7 +23,6 @@
     "@types/node": "^20.11.5",
     "concurrently": "^8.2.2",
     "nodemon": "^3.0.3",
-    "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.12"
   }
