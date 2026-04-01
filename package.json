@@ -4,7 +4,7 @@
   "description": "Lady Working Solutions — Conectando maes talentosas ao mercado B2B",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && cp -r public/assets dist/client/",
     "server": "tsx src/server/index.ts",
     "dev": "concurrently \"vite build --watch\" \"nodemon --exec tsx src/server/index.ts\"",
     "start": "node --import tsx src/server/index.ts"
