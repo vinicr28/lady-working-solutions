@@ -1,0 +1,214 @@
+================================================================================
+  EMPREGAELA — FULL PROJECT BOOTSTRAP PROMPT FOR CLAUDE CODE
+  Role: Software Architect | Stack: HTML + CSS + TypeScript + Node/Express + Prisma
+================================================================================
+
+CONTEXT
+-------
+You are bootstrapping a full-stack web platform called "EmpregaEla" — a job
+marketplace focused on empowering women in the workforce. Companies register to
+post job openings. Job seekers register to apply. The experience mirrors an
+e-commerce site: browsing is public, but taking action (applying, accessing
+courses) requires authentication.
+
+Read AGENTS.md in the project root before doing anything else. It is your single
+source of truth for architecture decisions, database schema, API contracts, coding
+standards, and design tokens.
+
+================================================================================
+PHASE 1 — PROJECT SCAFFOLD
+================================================================================
+
+Task 1.1 — Initialize the monorepo
+  - Run: npm init -y
+  - Install dependencies:
+      express, prisma, @prisma/client, bcrypt, jsonwebtoken, cookie-parser, cors, dotenv
+  - Install dev dependencies:
+      typescript, ts-node, vite, @types/express, @types/bcrypt,
+      @types/jsonwebtoken, @types/cookie-parser, @types/node, nodemon
+  - Create tsconfig.json with strict mode enabled
+  - Create vite.config.ts pointing to src/client/main.ts as entry
+  - Create the full directory tree described in AGENTS.md
+
+Task 1.2 — Environment setup
+  - Create .env.example with all variables listed in AGENTS.md
+  - Create .gitignore (node_modules, .env, dist, .DS_Store, prisma/migrations if not committed)
+
+Task 1.3 — Prisma setup
+  - Run: npx prisma init
+  - Paste the full schema from AGENTS.md into prisma/schema.prisma
+  - Create prisma/seed.ts with:
+      * 3 companies (with realistic Brazilian company names)
+      * 10 job listings across different types (FULL_TIME, PART_TIME, FREELANCE)
+      * 5 courses (mix of free and paid, tech + leadership topics)
+  - Add "prisma.seed" script to package.json pointing to ts-node prisma/seed.ts
+
+================================================================================
+PHASE 2 — BACKEND (Express + TypeScript)
+================================================================================
+
+Task 2.1 — Server entry point
+  - Create src/server/index.ts
+  - Register middleware: cors, cookie-parser, express.json()
+  - Mount all route files under /api prefix
+  - Register global error middleware last
+  - Listen on process.env.PORT || 3000
+
+Task 2.2 — Auth middleware
+  - Create src/server/middleware/auth.middleware.ts
+  - Verify JWT from httpOnly cookie named "token"
+  - Attach decoded payload to req.user
+  - Export: requireAuth (throws 401 if no valid token)
+  - Export: requireCompanyAuth (throws 403 if user is not a company)
+  - Export: requirePersonAuth (throws 403 if user is not a person)
+
+Task 2.3 — Auth routes (POST /api/auth/*)
+  - register/person  → hash password, create Person, return JWT cookie
+  - register/company → hash password, create Company, return JWT cookie
+  - login            → check email+password for both Person and Company tables,
+                       return JWT cookie with { id, role: "person"|"company" }
+  - logout           → clear cookie
+  - me               → return current user from DB (no password field)
+
+Task 2.4 — Jobs routes
+  - GET  /api/jobs          → list all active jobs, support ?search=&type=&remote=
+  - GET  /api/jobs/:id      → single job with company info
+  - POST /api/jobs          → requireCompanyAuth → create job
+  - PUT  /api/jobs/:id      → requireCompanyAuth → update own job only
+  - DELETE /api/jobs/:id    → requireCompanyAuth → soft delete (set isActive=false)
+
+Task 2.5 — Application routes
+  - POST /api/jobs/:id/apply    → requirePersonAuth → create Application
+                                  (return 409 if already applied)
+  - GET  /api/applications/mine → requirePersonAuth → list own applications
+
+Task 2.6 — Courses routes
+  - GET /api/courses      → requirePersonAuth → list all courses
+  - GET /api/courses/:id  → requirePersonAuth → course with modules and lessons
+
+Task 2.7 — Error middleware
+  - Catch all errors, log to console in development
+  - Return { success: false, error: "message" } — never expose stack traces in production
+
+================================================================================
+PHASE 3 — FRONTEND (TypeScript + HTML + CSS)
+================================================================================
+
+Task 3.1 — Global styles
+  - Create src/client/styles/variables.css with the full color palette from AGENTS.md
+  - Create src/client/styles/global.css:
+      * Import Google Fonts: DM Sans (400, 500, 600) + Playfair Display (600, 700)
+      * CSS reset (box-sizing, margin 0, etc.)
+      * Base typography using font variables
+      * Reusable utility classes: .btn-primary, .btn-secondary, .btn-outline,
+        .card, .badge, .badge-remote, .badge-women-friendly
+      * Form styles: .form-group, .form-input, .form-label, .form-error
+      * Layout helpers: .container (max-width 1200px, auto margin), .grid-2, .grid-3
+
+Task 3.2 — Client-side router
+  - Create src/client/router.ts — a lightweight hash-based SPA router
+  - Routes must match the page table in AGENTS.md
+  - Before rendering protected pages, check for auth token via GET /api/auth/me
+  - If not authenticated on a protected route → redirect to /login with
+    ?redirect= param so the user lands back after login
+
+Task 3.3 — Pages (one TypeScript file per page)
+
+  HOME (/):
+    - Hero section: large heading "O mercado de trabalho também é seu."
+    - Subheading + two CTAs: "Encontrar Vagas" and "Cadastrar Empresa"
+    - Stats strip: animated counters (vagas, empresas, cursos)
+    - Features section: 3 cards explaining the platform value
+    - Footer with links
+
+  JOB LISTINGS (/jobs) — PUBLIC:
+    - Search bar + filters (type, remote, women-friendly)
+    - Responsive job card grid: company logo, job title, location, type badge,
+      salary (if provided), "Ver Vaga" button
+    - Pagination or infinite scroll (your choice, document which)
+
+  JOB DETAIL (/jobs/:id) — PUBLIC:
+    - Full description, requirements, benefits
+    - Company card sidebar
+    - Large "Candidatar-se" CTA button → if not authenticated, redirect to login
+
+  APPLY (/apply/:id) — AUTH REQUIRED:
+    - Pre-filled with user name and email (read-only)
+    - Textarea: "Por que você é a candidata ideal?" (optional)
+    - Submit → POST /api/jobs/:id/apply → success state or error message
+
+  COURSES (/courses) — AUTH REQUIRED:
+    - Grid layout similar to Hotmart: thumbnail, title, instructor, duration,
+      level badge, price (or FREE badge)
+    - Filter by level (Iniciante / Intermediário / Avançado) and price (free/paid)
+
+  COURSE DETAIL (/courses/:id) — AUTH REQUIRED:
+    - Left: course info, instructor bio, module accordion with lesson list
+    - Right: sticky enrollment card (Enroll CTA or "Continue" if enrolled)
+    - Video player placeholder area
+
+  PERSON REGISTRATION (/register):
+    - Fields: name, email, password, confirm password
+    - Terms checkbox
+    - Link to company registration
+
+  COMPANY REGISTRATION (/register/company):
+    - Fields: company name, CNPJ, email, password, confirm password,
+      short description (optional)
+    - "Women-Friendly Company" checkbox (self-certification)
+
+  LOGIN (/login):
+    - Email + password
+    - Auto-detect if Company or Person (check both tables on backend)
+    - Link to both registration pages
+    - After login, redirect to ?redirect= param or /jobs
+
+================================================================================
+PHASE 4 — QUALITY & FINISHING
+================================================================================
+
+Task 4.1 — Accessibility audit
+  - All form inputs must have associated <label> elements
+  - All <img> tags must have descriptive alt attributes
+  - Interactive elements must have :focus-visible CSS styles
+  - Color contrast must meet WCAG AA (4.5:1 for normal text)
+  - Keyboard navigation must work on all interactive components
+
+Task 4.2 — Responsiveness check
+  - Test all pages at 375px (mobile), 768px (tablet), 1280px (desktop)
+  - Navigation must collapse to a hamburger menu on mobile
+  - Job card grid: 1 col mobile / 2 col tablet / 3 col desktop
+  - Course grid: 1 col mobile / 2 col tablet / 3 col desktop
+
+Task 4.3 — README.md
+  - Project description and mission
+  - Prerequisites and installation steps (npm install, prisma migrate, seed)
+  - Environment variable reference (.env.example)
+  - How to run dev server
+  - API endpoint reference (copy from AGENTS.md)
+  - Contributing guidelines
+
+================================================================================
+EXECUTION ORDER
+================================================================================
+
+Execute phases in strict order: 1 → 2 → 3 → 4
+Within each phase, execute tasks in order.
+After each Task, briefly confirm what was created/changed before moving to next.
+If a task requires a decision not covered by AGENTS.md, make the most pragmatic
+choice and add a short comment in the code explaining the reasoning.
+Do not ask for confirmation on standard implementation details — just build it.
+
+================================================================================
+DESIGN REMINDERS (repeat from AGENTS.md)
+================================================================================
+
+- Colors: ONLY via CSS custom properties defined in variables.css
+- Fonts: DM Sans (body) + Playfair Display (headings) — never Arial, Inter, Roboto
+- Tone: minimalist, clean, light — not sterile. Warm and empowering.
+- Primary brand accent: #C2185B (rose/pink)
+- Every page must feel cohesive with the others — shared header/footer component
+
+================================================================================
+END OF PROMPT
+================================================================================
