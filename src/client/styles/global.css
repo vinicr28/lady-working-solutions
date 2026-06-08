@@ -484,15 +484,16 @@ textarea.form-input {
 }
 
 .logo-text {
-  font-size: 1.18rem;
-  display: none;
+  font-size: 0.95rem;
+  display: inline;
   font-family: var(--font-display);
   font-weight: 600;
   letter-spacing: -0.01em;
+  line-height: 1.1;
 }
 
 @media (min-width: 640px) {
-  .logo-text { display: inline; }
+  .logo-text { font-size: 1.18rem; }
 }
 
 .nav-desktop {
