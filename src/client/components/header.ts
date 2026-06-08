@@ -6,12 +6,13 @@ export function renderHeader(): string {
   <header class="site-header">
     <div class="container header-inner">
       <a href="#/" class="logo" aria-label="Lady Working Solutions - Início">
-        <span class="logo-icon">LWS</span>
+        <span class="logo-icon"><img src="/assets/logo.svg" alt="" /></span>
         <span class="logo-text">Lady Working Solutions</span>
       </a>
       <nav class="nav-desktop" aria-label="Navegação principal">
         <a href="#/jobs" class="nav-link">Oportunidades</a>
         <a href="#/courses" class="nav-link">Trilhas</a>
+        <a href="#/planos" class="nav-link">Planos</a>
         <a href="#/about" class="nav-link">Sobre</a>
       </nav>
       <div class="header-actions" id="header-actions">
@@ -26,6 +27,7 @@ export function renderHeader(): string {
       <nav aria-label="Menu mobile">
         <a href="#/jobs" class="mobile-link">Oportunidades</a>
         <a href="#/courses" class="mobile-link">Trilhas</a>
+        <a href="#/planos" class="mobile-link">Planos</a>
         <a href="#/about" class="mobile-link">Sobre</a>
         <hr />
         <div id="mobile-actions">

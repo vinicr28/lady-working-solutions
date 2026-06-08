@@ -1,3 +1,4 @@
+import './styles/tailwind.css';
 import { addRoute, initRouter, handleRoute } from './router.js';
 import { renderHeader, initHeader, updateHeaderAuth } from './components/header.js';
 import { renderFooter } from './components/footer.js';
@@ -13,6 +14,7 @@ import { renderCourseDetail, initCourseDetail } from './pages/course-detail.js';
 import { renderRegisterPerson, initRegisterPerson } from './pages/register-person.js';
 import { renderRegisterCompany, initRegisterCompany } from './pages/register-company.js';
 import { renderLogin, initLogin } from './pages/login.js';
+import { renderPlanos, initPlanos } from './pages/planos.js';
 
 // Build app shell
 const app = document.getElementById('app');
@@ -31,11 +33,12 @@ addRoute('/about', renderAbout);
 addRoute('/jobs', renderJobs);
 addRoute('/jobs/:id', renderJobDetail);
 addRoute('/apply/:id', renderApply, true);
-addRoute('/courses', renderCourses, true);
+addRoute('/courses', renderCourses);
 addRoute('/courses/:id', renderCourseDetail, true);
 addRoute('/register', renderRegisterPerson);
 addRoute('/register/company', renderRegisterCompany);
 addRoute('/login', renderLogin);
+addRoute('/planos', renderPlanos);
 
 // Page-specific init hooks
 document.addEventListener('page:loaded', ((e: CustomEvent) => {
@@ -49,6 +52,7 @@ document.addEventListener('page:loaded', ((e: CustomEvent) => {
   else if (path === '/register') initRegisterPerson();
   else if (path === '/register/company') initRegisterCompany();
   else if (path === '/login') initLogin();
+  else if (path === '/planos') initPlanos();
 
   updateHeaderAuth();
 }) as EventListener);

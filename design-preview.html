@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LWS — Design System Preview (Boutique Colorido)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  /* ===== Neutrals ===== */
+  --ink:#1E1525; --ink-2:#3B2F45; --ink-soft:#6B5E76;
+  --bone:#FBF6F0; --bone-2:#F4EBE2; --surface:#FFFFFF; --line:#ECE3D8;
+  /* ===== Colorful (disciplined) ===== */
+  --magenta:#E8336D; --magenta-deep:#B0185A; --magenta-tint:#FCE7EF;
+  --grape:#6D28D9;  --grape-deep:#5B21B6;  --grape-tint:#EFE8FE;
+  --marigold:#F5A524; --marigold-deep:#B9760A; --marigold-tint:#FDF1DC;
+  --terracotta:#C45A3C; --terracotta-tint:#F6E6DF;
+  --teal:#0E9E8E; --teal-deep:#0B7A6E; --teal-tint:#DDF3F0;
+  /* ===== Type ===== */
+  --display:'Fraunces',serif; --body:'Inter',sans-serif; --mono:'Space Mono',monospace;
+  /* ===== Radius / shadow ===== */
+  --r-md:12px; --r-lg:18px; --r-xl:26px; --r-2xl:34px; --r-pill:999px;
+  --shadow-warm:0 24px 50px -24px rgba(30,21,37,.30);
+  --shadow-magenta:0 22px 44px -18px rgba(232,51,109,.45);
+  --shadow-grape:0 22px 44px -18px rgba(109,40,217,.45);
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--ink);background:var(--bone);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:72px 0;position:relative}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.05;letter-spacing:-.02em;color:var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.22em;color:var(--magenta-deep);font-weight:700;display:inline-block;margin-bottom:18px}
+.muted{color:var(--ink-soft)}
+.divider{height:1px;background:var(--line);max-width:1120px;margin:0 auto}
+
+/* ---------- Top bar ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:600;font-size:1.05rem}
+.brand .mark{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;font-family:var(--mono);font-weight:700;font-size:.7rem;background:linear-gradient(135deg,var(--magenta),var(--grape));box-shadow:var(--shadow-magenta)}
+.tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);border:1px solid var(--line);padding:7px 12px;border-radius:var(--r-pill)}
+
+/* ---------- HERO mock ---------- */
+.hero{background:var(--ink);color:#fff;border-radius:var(--r-2xl);overflow:hidden;position:relative;isolation:isolate;margin-top:8px}
+.hero::before{content:"";position:absolute;inset:-30%;z-index:-2;
+  background:
+    radial-gradient(40% 50% at 18% 22%,rgba(232,51,109,.85),transparent 60%),
+    radial-gradient(45% 55% at 85% 18%,rgba(109,40,217,.80),transparent 62%),
+    radial-gradient(50% 60% at 70% 95%,rgba(245,165,36,.55),transparent 60%);
+  filter:blur(20px)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background-image:var(--grain);background-size:160px;opacity:.10;mix-blend-mode:overlay}
+.hero-inner{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center;padding:52px}
+.hero h1{color:#fff;font-size:clamp(2.4rem,5vw,4rem);font-weight:600}
+.hero h1 em{font-style:italic;font-weight:400;color:#FFD9A8}
+.hero p{color:rgba(255,255,255,.78);font-size:1.12rem;max-width:46ch;margin-top:18px}
+.hero .eyebrow{color:#FFB3CC}
+.cta-row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.hero-photo{aspect-ratio:4/5;border-radius:var(--r-xl);background:
+  linear-gradient(140deg,rgba(255,255,255,.10),rgba(255,255,255,0)) ,
+  linear-gradient(135deg,var(--magenta),var(--grape));
+  display:grid;place-items:center;color:rgba(255,255,255,.8);font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;text-align:center;border:1px solid rgba(255,255,255,.16);box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.stat-strip{display:flex;gap:30px;margin-top:38px;flex-wrap:wrap}
+.stat-strip .n{font-family:var(--display);font-size:2rem;font-weight:600;color:#fff;display:block}
+.stat-strip .l{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--body);font-weight:600;font-size:1rem;border:none;cursor:pointer;padding:15px 26px;border-radius:var(--r-pill);text-decoration:none;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .2s}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{background:var(--magenta-deep);color:#fff;box-shadow:var(--shadow-magenta)}
+.btn-primary:hover{background:var(--magenta)}
+.btn-grape{background:var(--grape-deep);color:#fff;box-shadow:var(--shadow-grape)}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.35)}
+.btn-ghost.dark{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-ghost.dark:hover{background:var(--ink);color:#fff}
+.btn .arrow{transition:transform .25s}
+.btn:hover .arrow{transform:translateX(4px)}
+
+/* ---------- Swatches ---------- */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.sw{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+.sw .chip{height:92px}
+.sw .meta{padding:12px 14px}
+.sw .name{font-weight:600;font-size:.9rem}
+.sw .hex{font-family:var(--mono);font-size:.74rem;color:var(--ink-soft);text-transform:uppercase}
+
+/* ---------- Type specimen ---------- */
+.specimen{display:grid;gap:6px;margin-bottom:30px}
+.specimen .lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+.t-display{font-family:var(--display);font-size:clamp(2.6rem,6vw,4.6rem);font-weight:600;letter-spacing:-.025em;line-height:.98}
+.t-display em{font-style:italic;font-weight:400;color:var(--magenta-deep)}
+.t-h2{font-family:var(--display);font-size:2rem;font-weight:600}
+.t-body{font-size:1.05rem;max-width:60ch}
+.t-mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.2em;font-size:.8rem;color:var(--grape-deep)}
+
+/* ---------- Cards ---------- */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-warm);transition:transform .3s,box-shadow .3s}
+.card:hover{transform:translateY(-6px)}
+.card .thumb{height:150px;display:grid;place-items:center;font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.card .body{padding:22px}
+.card h3{font-size:1.25rem;margin-bottom:6px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.64rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border-radius:var(--r-pill)}
+.b-mag{background:var(--magenta-tint);color:var(--magenta-deep)}
+.b-grp{background:var(--grape-tint);color:var(--grape-deep)}
+.b-mar{background:var(--marigold-tint);color:var(--marigold-deep)}
+.b-tea{background:var(--teal-tint);color:var(--teal-deep)}
+
+/* ---------- Color block band ---------- */
+.band{border-radius:var(--r-2xl);padding:54px;color:#fff;position:relative;overflow:hidden;isolation:isolate}
+.band::after{content:"";position:absolute;inset:0;z-index:-1;background-image:var(--grain);background-size:160px;opacity:.12;mix-blend-mode:overlay}
+.band.mag{background:linear-gradient(135deg,var(--magenta),#ff5a8a)}
+.band.grp{background:linear-gradient(135deg,var(--grape),#9a5cf0)}
+.band h2{color:#fff;font-size:2.4rem}
+.band .quote{font-family:var(--display);font-size:1.7rem;font-weight:500;line-height:1.3;max-width:30ch}
+.counters{display:flex;gap:46px;flex-wrap:wrap;margin-top:10px}
+.counters .n{font-family:var(--display);font-size:3.2rem;font-weight:600;display:block;line-height:1}
+.counters .l{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+
+/* ---------- Motion notes ---------- */
+.notes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.note{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--magenta);border-radius:var(--r-md);padding:16px 18px}
+.note b{font-family:var(--display)}
+.note .k{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.14em;color:var(--grape-deep)}
+
+@media(max-width:820px){
+  .hero-inner{grid-template-columns:1fr;padding:34px}
+  .grid3{grid-template-columns:1fr}
+  .notes{grid-template-columns:1fr}
+  .band{padding:34px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><span class="mark">LWS</span> Lady Working Solutions</div>
+    <span class="tag">Design System · Boutique Colorido</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="eyebrow">Talento materno · Mercado B2B</span>
+        <h1>Mães que <em>movem</em> empresas — do home office para o mundo.</h1>
+        <p>Capacitação, alocação e impacto real para profissionais remotas que não vão deixar o talento em espera.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#">Encontrar oportunidades <span class="arrow">→</span></a>
+          <a class="btn btn-ghost" href="#">Cadastrar empresa</a>
+        </div>
+        <div class="stat-strip">
+          <div><span class="n">11M</span><span class="l">talentos fora do mercado</span></div>
+          <div><span class="n">2,5M</span><span class="l">mães que pausaram a carreira</span></div>
+          <div><span class="n">6</span><span class="l">trilhas de capacitação</span></div>
+        </div>
+      </div>
+      <div class="hero-photo">[ foto hero<br>4:5 · grade quente ]</div>
+    </div>
+  </div>
+</div>
+
+<!-- PALETTE -->
+<section class="wrap">
+  <span class="eyebrow">01 — Paleta</span>
+  <h2 class="t-h2" style="margin-bottom:26px">Colorido, porém disciplinado</h2>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#E8336D"></div><div class="meta"><div class="name">Magenta</div><div class="hex">#E8336D</div></div></div>
+    <div class="sw"><div class="chip" style="background:#6D28D9"></div><div class="meta"><div class="name">Grape</div><div class="hex">#6D28D9</div></div></div>
+    <div class="sw"><div class="chip" style="background:#F5A524"></div><div class="meta"><div class="name">Marigold</div><div class="hex">#F5A524</div></div></div>
+    <div class="sw"><div class="chip" style="background:#C45A3C"></div><div class="meta"><div class="name">Terracota</div><div class="hex">#C45A3C</div></div></div>
+    <div class="sw"><div class="chip" style="background:#0E9E8E"></div><div class="meta"><div class="name">Teal</div><div class="hex">#0E9E8E</div></div></div>
+    <div class="sw"><div class="chip" style="background:#1E1525"></div><div class="meta"><div class="name">Ink (plum)</div><div class="hex">#1E1525</div></div></div>
+    <div class="sw"><div class="chip" style="background:#FBF6F0;border-bottom:1px solid #ECE3D8"></div><div class="meta"><div class="name">Bone</div><div class="hex">#FBF6F0</div></div></div>
+    <div class="sw"><div class="chip" style="background:linear-gradient(135deg,#E8336D,#6D28D9)"></div><div class="meta"><div class="name">Gradiente</div><div class="hex">Mag → Grape</div></div></div>
+  </div>
+  <p class="muted" style="margin-top:18px;max-width:62ch">Cada seção da Home "veste" uma cor (color-blocking). Conforme você rola, a página troca de cor — é o que dá a sensação de marca premium e produzida.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- TYPOGRAPHY -->
+<section class="wrap">
+  <span class="eyebrow">02 — Tipografia</span>
+  <div class="specimen">
+    <span class="lbl">Display · Fraunces</span>
+    <div class="t-display">Talento não <em>tira</em> licença.</div>
+  </div>
+  <div class="specimen">
+    <span class="lbl">Corpo · Inter</span>
+    <p class="t-body">A Lady Working Solutions reconecta profissionais talentosas a empresas que precisam de gente boa, remota e pronta. Texto limpo, legível e moderno para tudo que é leitura.</p>
+  </div>
+  <div class="specimen">
+    <span class="lbl">Rótulos / dados · Space Mono</span>
+    <div class="t-mono">01 — Busca · Capacitação · Alocação</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BUTTONS + BADGES -->
+<section class="wrap">
+  <span class="eyebrow">03 — Componentes</span>
+  <h2 class="t-h2" style="margin-bottom:24px">Botões, badges & sombras coloridas</h2>
+  <div class="cta-row" style="margin-top:0;align-items:center">
+    <a class="btn btn-primary" href="#">Criar conta <span class="arrow">→</span></a>
+    <a class="btn btn-grape" href="#">Ver trilhas</a>
+    <a class="btn btn-ghost dark" href="#">Sou empresa</a>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:26px">
+    <span class="badge b-mag">100% remoto</span>
+    <span class="badge b-grp">Mãe-friendly</span>
+    <span class="badge b-mar">Capacitação grátis</span>
+    <span class="badge b-tea">Vaga ativa</span>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CARDS -->
+<section class="wrap">
+  <span class="eyebrow">04 — Cards de trilha</span>
+  <h2 class="t-h2" style="margin-bottom:24px">Hover com elevação + glow</h2>
+  <div class="grid3">
+    <div class="card">
+      <div class="thumb" style="background:linear-gradient(135deg,#E8336D,#ff7aa3)">[ social media ]</div>
+      <div class="body"><span class="badge b-mag">Trilha</span><h3 style="margin-top:12px">Social Media</h3><p class="muted">Estratégia, conteúdo e gestão de redes para marcas.</p></div>
+    </div>
+    <div class="card">
+      <div class="thumb" style="background:linear-gradient(135deg,#6D28D9,#9a5cf0)">[ vendas online ]</div>
+      <div class="body"><span class="badge b-grp">Trilha</span><h3 style="margin-top:12px">Vendas Online</h3><p class="muted">Funil, atendimento e fechamento em canais digitais.</p></div>
+    </div>
+    <div class="card">
+      <div class="thumb" style="background:linear-gradient(135deg,#F5A524,#ffc870)">[ design básico ]</div>
+      <div class="body"><span class="badge b-mar">Trilha</span><h3 style="margin-top:12px">Design Básico</h3><p class="muted">Fundamentos visuais e ferramentas para criar bonito.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COLOR BLOCKS -->
+<section class="wrap">
+  <span class="eyebrow">05 — Color blocking</span>
+  <div class="band mag" style="margin-bottom:22px">
+    <span class="eyebrow" style="color:rgba(255,255,255,.85)">Nosso impacto</span>
+    <div class="counters">
+      <div><span class="n">+320</span><span class="l">profissionais alocadas</span></div>
+      <div><span class="n">+48</span><span class="l">empresas parceiras</span></div>
+      <div><span class="n">6</span><span class="l">trilhas de capacitação</span></div>
+    </div>
+  </div>
+  <div class="band grp">
+    <span class="eyebrow" style="color:rgba(255,255,255,.85)">Depoimento</span>
+    <p class="quote">"Voltei a trabalhar sem abrir mão de estar presente. A LWS me deu estrutura — e a empresa ganhou uma profissional inteira."</p>
+    <p style="font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-top:18px">Marina · Assistente Virtual</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MOTION -->
+<section class="wrap">
+  <span class="eyebrow">06 — Movimento (GSAP + Lenis)</span>
+  <h2 class="t-h2" style="margin-bottom:24px">O que vai se mover</h2>
+  <div class="notes">
+    <div class="note"><span class="k">Scroll suave</span><br><b>Lenis</b> — rolagem com inércia, base de tudo.</div>
+    <div class="note"><span class="k">Text reveal</span><br><b>Headlines</b> sobem linha-a-linha com máscara.</div>
+    <div class="note"><span class="k">Parallax</span><br><b>Foto do hero</b> e blobs se movem em camadas.</div>
+    <div class="note"><span class="k">Pin / scroll-stop</span><br><b>"Como Funciona"</b> fixa e revela Busca→Capacitação→Alocação.</div>
+    <div class="note"><span class="k">Count-up</span><br><b>Números de impacto</b> contam ao entrar na tela.</div>
+    <div class="note"><span class="k">Marquee + zoom</span><br><b>Logos de parceiros</b> deslizam; imagens dão zoom suave.</div>
+  </div>
+  <p class="muted" style="margin-top:22px">Tudo respeitando <span class="t-mono" style="font-size:.7rem">prefers-reduced-motion</span> para acessibilidade.</p>
+</section>
+
+<footer class="wrap" style="padding:40px 24px 70px">
+  <div class="divider" style="margin-bottom:30px"></div>
+  <p class="muted" style="font-size:.9rem">Preview do sistema de design — Lady Working Solutions. Aprovado o vibe, eu aplico em <code>variables.css</code> e reconstruo a Home com motion + imagens geradas.</p>
+</footer>
+
+</body>
+</html>

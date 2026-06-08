@@ -1,5 +1,24 @@
 import { api } from '../api.js';
 
+const MOCK_COURSES: Array<Record<string, unknown>> = [
+  { id: '1', title: 'Atendimento ao Cliente', track: 'customer-service', instructor: 'Equipe LWS', level: 'Iniciante', duration: '8h', isFree: true, price: 0, moduleCount: 4, lessonCount: 24 },
+  { id: '2', title: 'Social Media na Prática', track: 'social-media', instructor: 'Equipe LWS', level: 'Intermediário', duration: '12h', isFree: true, price: 0, moduleCount: 5, lessonCount: 32 },
+  { id: '3', title: 'Assistência Virtual', track: 'virtual-assistance', instructor: 'Equipe LWS', level: 'Iniciante', duration: '10h', isFree: true, price: 0, moduleCount: 4, lessonCount: 28 },
+  { id: '4', title: 'Vendas Online', track: 'online-sales', instructor: 'Equipe LWS', level: 'Intermediário', duration: '9h', isFree: false, price: 97, moduleCount: 5, lessonCount: 30 },
+  { id: '5', title: 'Design Básico', track: 'basic-design', instructor: 'Equipe LWS', level: 'Iniciante', duration: '14h', isFree: true, price: 0, moduleCount: 6, lessonCount: 36 },
+  { id: '6', title: 'Edição de Vídeo', track: 'video-editing', instructor: 'Equipe LWS', level: 'Avançado', duration: '16h', isFree: false, price: 147, moduleCount: 6, lessonCount: 40 },
+];
+
+function filterMockCourses(params: Record<string, string>): Array<Record<string, unknown>> {
+  return MOCK_COURSES.filter((c) => {
+    if (params.track && c.track !== params.track) return false;
+    if (params.level && c.level !== params.level) return false;
+    if (params.free === 'true' && !c.isFree) return false;
+    if (params.free === 'false' && c.isFree) return false;
+    return true;
+  });
+}
+
 export async function renderCourses(): Promise<string> {
   return `
   <div class="page">
@@ -31,7 +50,7 @@ export async function renderCourses(): Promise<string> {
       </div>
 
       <div class="grid grid-3" id="courses-grid">
-        <div class="text-center" style="grid-column:1/-1"><p>Carregando cursos...</p></div>
+        <div class="text-center" style="grid-column:1/-1"><p>Carregando trilhas...</p></div>
       </div>
     </div>
   </div>
@@ -49,40 +68,48 @@ export function initCourses(): void {
     if (levelFilter?.value && levelFilter.value !== 'all') params.level = levelFilter.value;
     if (priceFilter?.value && priceFilter.value !== 'all') params.free = priceFilter.value;
 
-    const res = await api.getCourses(params);
+    // Try the API; fall back to mock data when the server is offline.
+    let courses: Array<Record<string, unknown>>;
+    try {
+      const res = await api.getCourses(params);
+      courses =
+        res.success && Array.isArray(res.data) && (res.data as unknown[]).length
+          ? (res.data as Array<Record<string, unknown>>)
+          : filterMockCourses(params);
+    } catch {
+      courses = filterMockCourses(params);
+    }
+
     const grid = document.getElementById('courses-grid');
     if (!grid) return;
 
-    if (res.success && res.data) {
-      const courses = res.data as Array<Record<string, unknown>>;
-      if (courses.length === 0) {
-        grid.innerHTML = '<div class="text-center" style="grid-column:1/-1"><p>Nenhum curso encontrado.</p></div>';
-        return;
-      }
-
-      grid.innerHTML = courses
-        .map(
-          (c) => `
-        <div class="card course-card">
-          <div class="course-card-thumb">
-            <img src="${getTrackImage(c.track as string)}" alt="${c.title}" class="course-thumb-img" />
-          </div>
-          <div class="course-card-body">
-            <h3><a href="#/courses/${c.id}">${c.title}</a></h3>
-            <p class="text-muted">${c.instructor}</p>
-            <div class="course-card-meta">
-              <span class="badge badge-primary">${c.level}</span>
-              <span class="text-muted">${c.duration}</span>
-              ${c.isFree ? '<span class="badge badge-free">Gratuito</span>' : `<span class="badge badge-primary">R$ ${(c.price as number).toFixed(2)}</span>`}
-            </div>
-            <p class="text-muted mt-sm">${c.moduleCount} módulos · ${c.lessonCount} aulas</p>
-            <a href="#/courses/${c.id}" class="btn btn-outline btn-sm mt-md">Ver Trilha</a>
-          </div>
-        </div>
-      `
-        )
-        .join('');
+    if (courses.length === 0) {
+      grid.innerHTML = '<div class="text-center" style="grid-column:1/-1"><p>Nenhuma trilha encontrada com os filtros selecionados.</p></div>';
+      return;
     }
+
+    grid.innerHTML = courses
+      .map(
+        (c) => `
+      <div class="card course-card">
+        <div class="course-card-thumb">
+          <img src="${getTrackImage(c.track as string)}" alt="${c.title}" class="course-thumb-img" />
+        </div>
+        <div class="course-card-body">
+          <h3><a href="#/courses/${c.id}">${c.title}</a></h3>
+          <p class="text-muted">${c.instructor}</p>
+          <div class="course-card-meta">
+            <span class="badge badge-primary">${c.level}</span>
+            <span class="text-muted">${c.duration}</span>
+            ${c.isFree ? '<span class="badge badge-free">Gratuito</span>' : `<span class="badge badge-primary">R$ ${(c.price as number).toFixed(2)}</span>`}
+          </div>
+          <p class="text-muted mt-sm">${c.moduleCount} módulos · ${c.lessonCount} aulas</p>
+          <a href="#/courses/${c.id}" class="btn btn-outline btn-sm mt-md">Ver Trilha</a>
+        </div>
+      </div>
+    `
+      )
+      .join('');
   };
 
   trackFilter?.addEventListener('change', loadCourses);

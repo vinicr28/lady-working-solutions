@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Noise/grain overlay used by the React hero (reuses the global --grain token) */
+.noise-overlay {
+  background-image: var(--grain);
+  background-size: 180px;
+  background-repeat: repeat;
+}
+
+/* Partner marquee */
+@keyframes lws-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.lws-marquee {
+  display: inline-flex;
+  animation: lws-marquee 28s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lws-marquee { animation: none; }
+}

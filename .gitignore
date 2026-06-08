@@ -4,3 +4,6 @@ dist/
 .DS_Store
 *.log
 .vercel
+
+# Raw generated assets (originals) — app uses optimized versions in public/assets
+public/gerado/

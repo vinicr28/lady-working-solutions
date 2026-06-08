@@ -4,7 +4,7 @@ export function renderFooter(): string {
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <span class="logo-icon">LWS</span>
+          <span class="logo-icon"><img src="/assets/logo.svg" alt="Lady Working Solutions" /></span>
           <p class="footer-tagline">Conectando mães talentosas ao mercado B2B</p>
         </div>
         <div class="footer-links">
@@ -20,7 +20,7 @@ export function renderFooter(): string {
         </div>
         <div class="footer-links">
           <h4>Equipe</h4>
-          <p class="text-muted">Vinicius, Roberta, Paola & Giuliana</p>
+          <p class="text-muted">Luis Guilherme, Yago Yan, Lucas Almeida & Edson Sales</p>
         </div>
       </div>
       <div class="footer-bottom">

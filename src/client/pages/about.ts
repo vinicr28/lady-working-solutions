@@ -23,24 +23,20 @@ export function renderAbout(): string {
         <h2 class="section-title">Nosso Time</h2>
         <div class="grid grid-2">
           <div class="card team-card text-center">
-            <div class="team-avatar">V</div>
-            <h3>Vinicius</h3>
-            <p class="text-muted">Co-fundador & Tecnologia</p>
+            <div class="team-avatar">LG</div>
+            <h3>Luis Guilherme</h3>
           </div>
           <div class="card team-card text-center">
-            <div class="team-avatar">R</div>
-            <h3>Roberta</h3>
-            <p class="text-muted">Co-fundadora & Operações</p>
+            <div class="team-avatar">YY</div>
+            <h3>Yago Yan</h3>
           </div>
           <div class="card team-card text-center">
-            <div class="team-avatar">P</div>
-            <h3>Paola</h3>
-            <p class="text-muted">Co-fundadora & Capacitação</p>
+            <div class="team-avatar">LA</div>
+            <h3>Lucas Almeida</h3>
           </div>
           <div class="card team-card text-center">
-            <div class="team-avatar">G</div>
-            <h3>Giuliana</h3>
-            <p class="text-muted">Co-fundadora & Estratégia</p>
+            <div class="team-avatar">ES</div>
+            <h3>Edson Sales</h3>
           </div>
         </div>
       </section>

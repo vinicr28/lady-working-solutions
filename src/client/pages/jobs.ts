@@ -1,5 +1,26 @@
 import { api } from '../api.js';
 
+const MOCK_JOBS: Array<Record<string, unknown>> = [
+  { id: '1', title: 'Assistente Virtual', company: { name: 'TechNova', isMotherFriendly: true }, type: 'PART_TIME', remote: true, location: 'Remoto · Brasil', salary: 'R$ 2.000 – 2.800' },
+  { id: '2', title: 'Social Media Júnior', company: { name: 'Marca Viva', isMotherFriendly: true }, type: 'FREELANCE', remote: true, location: 'Remoto', salary: 'R$ 1.500 / projeto' },
+  { id: '3', title: 'Atendimento ao Cliente', company: { name: 'Loja Boa', isMotherFriendly: false }, type: 'FULL_TIME', remote: true, location: 'Remoto · SP', salary: 'R$ 2.400' },
+  { id: '4', title: 'Designer Gráfico', company: { name: 'Estúdio Aurora', isMotherFriendly: true }, type: 'FREELANCE', remote: true, location: 'Remoto', salary: 'A combinar' },
+  { id: '5', title: 'Editora de Vídeo', company: { name: 'Conteúdo+', isMotherFriendly: false }, type: 'PART_TIME', remote: true, location: 'Remoto', salary: 'R$ 2.200' },
+  { id: '6', title: 'Executiva de Vendas', company: { name: 'VendeMais', isMotherFriendly: true }, type: 'FULL_TIME', remote: true, location: 'Remoto · Brasil', salary: 'R$ 3.000 + comissão' },
+  { id: '7', title: 'Analista de Suporte', company: { name: 'HelpDesk Co', isMotherFriendly: true }, type: 'FULL_TIME', remote: true, location: 'Remoto', salary: 'R$ 2.600' },
+  { id: '8', title: 'Estágio em Marketing', company: { name: 'Start Hub', isMotherFriendly: false }, type: 'INTERNSHIP', remote: true, location: 'Remoto', salary: 'R$ 1.200' },
+];
+
+function filterMockJobs(params: Record<string, string>): Array<Record<string, unknown>> {
+  return MOCK_JOBS.filter((j) => {
+    if (params.search && !(j.title as string).toLowerCase().includes(params.search.toLowerCase())) return false;
+    if (params.type && j.type !== params.type) return false;
+    if (params.remote === 'true' && !j.remote) return false;
+    if (params.motherFriendly === 'true' && !(j.company as Record<string, unknown>)?.isMotherFriendly) return false;
+    return true;
+  });
+}
+
 export async function renderJobs(): Promise<string> {
   return `
   <div class="page">
@@ -53,12 +74,19 @@ export function initJobs(): void {
     if (remoteFilter?.checked) params.remote = 'true';
     if (motherFilter?.checked) params.motherFriendly = 'true';
 
-    const res = await api.getJobs(params);
-    if (res.success && res.data) {
-      allJobs = res.data as Array<Record<string, unknown>>;
-      currentPage = 1;
-      renderJobsList();
+    // Try the API; fall back to mock data when the server is offline.
+    try {
+      const res = await api.getJobs(params);
+      allJobs =
+        res.success && Array.isArray(res.data) && (res.data as unknown[]).length
+          ? (res.data as Array<Record<string, unknown>>)
+          : filterMockJobs(params);
+    } catch {
+      allJobs = filterMockJobs(params);
     }
+
+    currentPage = 1;
+    renderJobsList();
   };
 
   search?.addEventListener('input', debounce(loadJobs, 300));
